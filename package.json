@@ -78,7 +78,7 @@
     "typescript": "^3.9.10"
   },
   "peerDependencies": {
-    "airtable": "^0.10.1",
+    "airtable": "^0.11.2",
     "react": "^16.9.0"
   },
   "husky": {
