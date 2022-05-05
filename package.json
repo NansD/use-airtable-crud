@@ -1,6 +1,6 @@
 {
   "name": "use-airtable-crud",
-  "version": "0.0.0-development",
+  "version": "1.0.0",
   "description": "A react hook to handle crud operations against Airtable",
   "main": "dist/use-airtable-crud.js",
   "module": "dist/use-airtable-crud.esm.js",
