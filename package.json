@@ -1,10 +1,10 @@
 {
-  "name": "typescript-react-hooks-starter",
+  "name": "use-airtable-crud",
   "version": "0.0.0-development",
-  "description": "React Hooks template for building with TypeScript",
-  "main": "dist/typescript-react-hooks-starter.js",
-  "module": "dist/typescript-react-hooks-starter.esm.js",
-  "unpkg": "dist/typescript-react-hooks-starter.umd.min.js",
+  "description": "A react hook to handle crud operations against Airtable",
+  "main": "dist/use-airtable-crud.js",
+  "module": "dist/use-airtable-crud.esm.js",
+  "unpkg": "dist/use-airtable-crud.umd.min.js",
   "types": "dist/index.d.ts",
   "sideEffects": false,
   "files": [
@@ -29,14 +29,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/kotarella1110/typescript-react-hooks-starter.git"
+    "url": "https://github.com/NansD/use-airtable-crud.git"
   },
-  "author": "Kotaro Sugawara <kotarella1110@gmail.com>",
+  "author": "Nans Dumortier <dumortier.nans@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/kotarella1110/typescript-react-hooks-starter/issues"
+    "url": "https://github.com/NansD/use-airtable-crud/issues"
   },
-  "homepage": "https://github.com/kotarella1110/typescript-react-hooks-starter#readme",
+  "homepage": "https://github.com/NansD/use-airtable-crud#readme",
   "devDependencies": {
     "@commitlint/cli": "^13.1.0",
     "@commitlint/config-conventional": "^13.1.0",
@@ -78,7 +78,8 @@
     "typescript": "^3.9.10"
   },
   "peerDependencies": {
-    "react": "^16.8.0"
+    "airtable": "^0.10.1",
+    "react": "^16.9.0"
   },
   "husky": {
     "hooks": {

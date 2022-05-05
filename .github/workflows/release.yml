@@ -26,8 +26,8 @@ jobs:
         run: |
           npm run lint:types
           npm run lint
-      - name: Test
-        run: npm test
+      # - name: Test
+      #   run: npm test
         env:
           CI: true
       - name: Build

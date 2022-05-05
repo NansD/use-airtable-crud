@@ -12,7 +12,7 @@ export default [
   {
     input: 'src/index.ts',
     output: {
-      name: 'TypeScriptReactHooksStarter',
+      name: 'use-airtable-crud',
       file: pkg.unpkg,
       format: 'umd',
       sourcemap: true,
