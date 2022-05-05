@@ -29,7 +29,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/NansD/use-airtable-crud.git"
+    "url": "git@github.com:NansD/use-airtable-crud.git"
   },
   "author": "Nans Dumortier <dumortier.nans@gmail.com>",
   "license": "MIT",
