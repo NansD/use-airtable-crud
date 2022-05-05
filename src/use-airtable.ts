@@ -1,7 +1,7 @@
 import Airtable, { FieldSet, Record } from 'airtable';
 import { QueryParams } from 'airtable/lib/query_params';
-import { useEffect, useState } from 'react';
-import uniqBy from './uniqBy';
+import { useCallback, useEffect, useState } from 'react';
+import uniqBy from './helpers/uniqBy';
 
 /**
  *
@@ -27,12 +27,33 @@ export default function useAirtable(
   apiKey: string,
   baseId: string,
   selectOptions: QueryParams<FieldSet> = {},
+  onError?: (error: unknown) => void,
 ) {
   const [records, setRecords] = useState<Record<FieldSet>[]>([]);
   const [loading, setIsLoading] = useState(false);
+  const [error, setError] = useState<unknown>();
   const base = new Airtable({ apiKey }).base(baseId);
 
-  const getRecords = () => {
+  const tryCatch = useCallback(
+    async function handleTryCatch<T>(
+      asyncOperation: () => Promise<T>,
+    ): Promise<[unknown, T | void]> {
+      setIsLoading(true);
+      try {
+        const result = await asyncOperation();
+        setIsLoading(false);
+        return [undefined, result];
+      } catch (caughtError) {
+        setError(caughtError);
+        if (onError) onError(caughtError);
+        setIsLoading(false);
+        return [error, undefined];
+      }
+    },
+    [onError, setError],
+  );
+
+  function getRecords() {
     base(tableName)
       .select({
         view: 'Grid view',
@@ -45,12 +66,13 @@ export default function useAirtable(
           fetchNextPage();
         },
         (err) => {
-          if (err) {
-            console.error(err);
+          setError(err);
+          if (onError) {
+            onError(err);
           }
         },
       );
-  };
+  }
 
   // when the component mounts, get the records
   useEffect(() => {
@@ -58,38 +80,42 @@ export default function useAirtable(
   }, []);
 
   async function createRecord(fields: Record<FieldSet>[]) {
-    setIsLoading(true);
-    const record = await base(tableName).create(fields);
-    // @ts-ignore
-    setRecords([...records, record]);
-    setIsLoading(false);
+    const [, record] = await tryCatch(() => base(tableName).create(fields));
+    if (record) {
+      // @ts-ignore
+      setRecords([...records, record]);
+    }
   }
 
   async function updateRecord(recordId: string, fields: Record<FieldSet>) {
-    setIsLoading(true);
-    const updatedRecords = await base(tableName).update([
-      {
-        ...fields,
-        id: recordId,
-      },
-    ]);
-    updatedRecords?.forEach((updatedRecord) => {
-      // on successful request -> update records state
-      setRecords(
-        records.map((record) =>
-          record.id === recordId ? updatedRecord : record,
-        ),
-      );
-    });
-    setIsLoading(false);
+    const [, updatedRecords] = await tryCatch(() =>
+      base(tableName).update([
+        {
+          ...fields,
+          id: recordId,
+        },
+      ]),
+    );
+    if (updatedRecords) {
+      updatedRecords.forEach((updatedRecord) => {
+        // on successful request -> update records state
+        setRecords(
+          records.map((record) =>
+            record.id === recordId ? updatedRecord : record,
+          ),
+        );
+      });
+    }
   }
 
   async function deleteRecord(recordId: string) {
-    setIsLoading(true);
-    await base(tableName).destroy(recordId);
-    // on successful request -> update records state
-    setRecords(records.filter((record) => record.id !== recordId));
-    setIsLoading(false);
+    const [errorOcurred] = await tryCatch(() =>
+      base(tableName).destroy(recordId),
+    );
+    if (!errorOcurred) {
+      // on successful request -> update records state
+      setRecords(records.filter((record) => record.id !== recordId));
+    }
   }
 
   return {
@@ -99,5 +125,6 @@ export default function useAirtable(
     deleteRecord,
     getRecords,
     loading,
+    error,
   } as const;
 }
