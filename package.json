@@ -25,7 +25,9 @@
   "keywords": [
     "react",
     "hooks",
-    "react-hooks"
+    "react-hooks",
+    "airtable",
+    "crud"
   ],
   "repository": {
     "type": "git",
