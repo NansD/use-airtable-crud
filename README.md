@@ -1,5 +1,7 @@
 # use-airtable-crud
 
+![npm version](https://img.shields.io/npm/v/use-airtable-crud)
+![npm downloads](https://img.shields.io/npm/dw/use-airtable-crud)
 ## Install
 ```bash
 npm install --save airtable use-airtable-crud
